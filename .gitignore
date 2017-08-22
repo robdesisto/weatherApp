@@ -1,4 +1,4 @@
 .idea
 .DS_Store
 npm-debug.log
-node_modulesnode_modules/
+node_modules
