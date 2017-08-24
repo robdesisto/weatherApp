@@ -44,29 +44,34 @@ weatherApp.controller('forecastController', ['$scope', '$resource', '$routeParam
     $scope.weatherAPI = $resource("http://api.openweathermap.org/data/2.5/forecast/daily?APPID=2db4f864ab87744243c3bb775739460d", { callback: "JSON_CALLBACK" }, { get: { method: "JSONP" }});
 
     $scope.weatherResult = $scope.weatherAPI.get({ q: $scope.city, cnt: $scope.days });
-    $scope.convertToFahrenheit = function(degK) {
-        return Math.round((1.8 * (degK - 273)) + 32);
-    }
-
-    $scope.convertToDate = function(dt) {
-        return new Date(dt * 1000);
-    };
 
 }]);
 
 // API for openweathermap:  http://api.openweathermap.org/data/2.5/forecast/daily?APPID=2db4f864ab87744243c3bb775739460d
 
 //CUSTOM DIRECTIVES FOR TEMPLATES
-weatherApp.directive("weatherCitySearch", function() {
-   return {
-       restrict: 'E',
-       templateUrl: 'directives/weathersearch.html',
-       replace: true,
-       scope: {
-           weatherDay: "=",
-           convertToStandard: "&",
-           convertToDate: "&",
-           dateFormat: "@"
-       }
-   }
+export class WeatherResultComponent {
+
+    constructor() {
+        // For debugging
+        // console.log(this);
+        this.dateFormat = 'MMM d, y';
+    }
+
+    convertToFahrenheit(degK) {
+        return Math.round((1.8 * (degK - 273)) + 32);
+    }
+
+    convertToDate(dt) {
+        return new Date(dt * 1000);
+    }
+
+}
+
+weatherApp.component("weatherCitySearch", {
+    controller: WeatherResultComponent,
+    templateUrl: 'directives/weathersearch.html',
+    bindings: {
+        weatherDay: "<"
+    }
 });
